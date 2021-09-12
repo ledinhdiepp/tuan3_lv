@@ -17,8 +17,6 @@ class ProductDetail extends Component {
 
   }
   render() {
-    
-    
     var { match } = this.props;
         if (match) {
             var id = match.params.productId;
@@ -34,8 +32,6 @@ class ProductDetail extends Component {
             }
             // if(this.props.products.id)
         }
-    
-   
   }
 }
 

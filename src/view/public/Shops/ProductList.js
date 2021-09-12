@@ -2,42 +2,46 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ProducItem from "./ProducItem";
 import { connect } from "react-redux";
-import { actFetchProductsRequest } from '../../../actions/index';
-import Category from "../components/Category";
-import '../style/productlist.css';
+import { actFetchProductsRequest } from "../../../actions/index";
+import "../style/productlist.css";
 class ProductList extends Component {
-  
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      search : "",
-      sort: 'asc'
-    }
+      search: "",
+      sort: "asc",
+    };
   }
 
   componentDidMount() {
     this.props.fetchAllProducts();
   }
-  onSort = sortType =>{
-    this.setState({sortType})
+  onSort = (sortType) => {
+    this.setState({ sortType });
+  };
+  handlecheckbox = event =>{
+    this.setState({
+      search : event.target.value
+    })
   }
   render() {
     var { products } = this.props;
-    const {sortType} = this.state;
-    const filterItem = products.filter(item => {
-      if(item.description){
-        return item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
-        || item.description.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
-        || item.price.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
-      }
-    })
-
-    const sorted = products.sort((a,b)=>{
-      const isReversed = (sortType === 'asc') ? 1 : -1;
-      return isReversed * a.name.localeCompare(b.name)
-    })
+    const { sortType } = this.state;
+    
+    const filterItem = products.filter((item) => {
+        return (
+          item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==-1 ||
+          item.description.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1 ||
+          item.price.toLowerCase().indexOf(this.state.search.toLowerCase()) !==-1 ||
+          item.category.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==-1
+        );
+    });
+   
+    const sorted = products.sort((a, b) => {
+      const isReversed = sortType === "asc" ? 1 : -1;
+      return isReversed * a.name.localeCompare(b.name);
+    });
     return (
-
       <div>
         <div className="breacrumb-section">
           <div className="container">
@@ -60,7 +64,26 @@ class ProductList extends Component {
             <div className="row">
               <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
                 
-                <Category />
+                <div className="filter-widget">
+                  <h4 className="fw-title">Category</h4>
+                  <div className="fw-brand-check">
+                    <div className="bc-item">
+                      <label htmlFor="bc-calvin" >
+                        Kaki
+                        <input onChange={this.handlecheckbox} type="checkbox" id="bc-calvin" value="Kaki"  />
+                        <span className="checkmark" />
+                      </label>
+                    </div>
+                    <div className="bc-item">
+                      <label htmlFor="bc-diesel">
+                        Cotton
+                        <input onChange={this.handlecheckbox} type="checkbox" id="bc-diesel"  value="Cotton"/>
+                        <span className="checkmark" />
+                      </label>
+                    </div>
+                    
+                  </div>
+                </div>
 
                 <div className="filter-widget">
                   <h4 className="fw-title">Color</h4>
@@ -133,25 +156,42 @@ class ProductList extends Component {
                         <button type="submit">
                           <i class="fa fa-search"></i>
                         </button>
-                        
                       </form>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-lg-7 col-md-7">
-                    
-                    <div className="dropdown">
-                      <a className="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Sort<i class="fas fa-filter"></i>
-                      </a>
-                      <div className="dropdown-menu" aria-labelledby="dropdownMenuLink  ">
-                        
-                        <Link className="dropdown-item" onClick={() =>this.onSort('asc')}>ASC</Link>
-                        <Link className="dropdown-item" onClick={() =>this.onSort('desc')}>DESC</Link>
-                        
+                      <div className="dropdown">
+                        <a
+                          className="btn btn-secondary dropdown-toggle"
+                          href="#"
+                          role="button"
+                          id="dropdownMenuLink"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          Sort<i class="fas fa-filter"></i>
+                        </a>
+                        <div
+                          className="dropdown-menu"
+                          aria-labelledby="dropdownMenuLink  "
+                        >
+                          <Link
+                            className="dropdown-item"
+                            onClick={() => this.onSort("asc")}
+                          >
+                            ASC
+                          </Link>
+                          <Link
+                            className="dropdown-item"
+                            onClick={() => this.onSort("desc")}
+                          >
+                            DESC
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                    {/* <label for="cars">Choose a car:</label>
+                      {/* <label for="cars">Choose a car:</label>
                       <button onClick={() =>this.onSort('asc')}>asc</button>
                       <button onClick={() =>this.onSort('desc')}>desc</button> */}
                       {/* <select name="cars" id="cars">
@@ -166,20 +206,10 @@ class ProductList extends Component {
                 </div>
                 <div className="product-list">
                   <div className="row">
-                   
-                   {
-                    sorted&&filterItem.map((product,index) =>{
-                      return(
-                        <ProducItem
-                            key={index}
-                            product={product}
-                            
-                        />
-                      )
-                    })
-                   }
-
-
+                    {sorted &&
+                      filterItem.map((product, index) => {
+                        return <ProducItem key={index} product={product} />;
+                      })}
                   </div>
                 </div>
                 <div className="loading-more">
@@ -194,19 +224,18 @@ class ProductList extends Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-      products: state.products
-  }
-}
+    products: state.products,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-      fetchAllProducts : () => {
-          dispatch(actFetchProductsRequest());
-      },
-      
-  }
-}
+    fetchAllProducts: () => {
+      dispatch(actFetchProductsRequest());
+    },
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

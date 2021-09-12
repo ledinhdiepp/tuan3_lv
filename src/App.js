@@ -11,11 +11,11 @@ import {Services,News,Team} from './view/public/components/export'
 import Footer from './components/Footer'
 // import Shops from './view/public/Shops'
 import ProductDetail from './view/public/ProductDetails/ProductDetail'
-import Shopcart from './view/public/Shopcart'
+import Shopcart from './view/public/ShoppingCart/Shopcart'
 import Checkout from './view/public/Checkout'
 import Blogs from './view/public/Blogs'
 import Contact from './view/public/Contact'
-import ProductList from './view/public/Shops/ProductList'
+import ProductList from './view/public/Shops/ProductList'	
 class App extends Component {
 	render() {
 		return (
@@ -44,6 +44,7 @@ class App extends Component {
 						<Route path='/shopping-cart' component={Shopcart} />
 						<Route path='/checkout' component={Checkout} />
 						<Route path='/blogs' component={Blogs} />
+						<Route path='/shoppingcart'	component={Shopcart} />
 						<Route>404 Not Found!</Route>
 					</Switch>
 				</Router>

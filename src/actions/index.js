@@ -29,7 +29,21 @@ export const actDeleteProduct = (id) => {
         id
     }
 }
+export const actAddTocartRequest = (product,quantity) =>{
+    return dispatch =>{
+        return callApi('orders', 'POST', (product,quantity)).then(res => {
+            dispatch(actAddtoCart(res.data));
+        });
+    }
+}
 
+export const actAddtoCart = (product,quanity) => {
+    return {
+        type : Types.ADD_PRODUCT,
+        product,
+        quanity
+    }
+}
 export const actAddProductRequest = (product) => {
     return dispatch => {
         return callApi('products', 'POST', product).then(res => {
@@ -59,6 +73,7 @@ export const actGetProduct = (product) => {
         product
     }
 }
+
 
 export const actUpdateProductRequest = (product) => {
     return dispatch => {
